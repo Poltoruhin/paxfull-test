@@ -14,17 +14,16 @@ class App extends React.Component {
             error: null,
             isLoaded: false,
         };
+        this.handleBurgerClick = this.handleBurgerClick.bind(this);
+        this.handleTradeClick = this.handleTradeClick.bind(this);
     }
 
     handleTradeClick(selectedTradeIndex) {
-        this.setState({
-            selectedTradeIndex,
-            isSidebarExpanded: false,
-        })
+        this.setState((prevState) => ({...prevState, selectedTradeIndex, isSidebarExpanded: false}))
     }
 
     handleBurgerClick() {
-        this.setState({isSidebarExpanded: !this.state.isSidebarExpanded})
+        this.setState((prevState) => ({...prevState, isSidebarExpanded: !prevState.isSidebarExpanded}))
     }
 
     componentDidMount() {
@@ -32,17 +31,19 @@ class App extends React.Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    this.setState({
+                    this.setState((prevState) => ({
+                        ...prevState,
                         isLoaded: true,
                         trades: result.data,
                         selectedTradeIndex: result.data.length ? 0 : null
-                    });
+                    }))
                 },
                 (error) => {
-                    this.setState({
+                    this.setState((prevState) => ({
+                        ...prevState,
                         isLoaded: true,
                         error
-                    });
+                    }))
                 }
             )
     }
@@ -51,13 +52,13 @@ class App extends React.Component {
         const {trades, selectedTradeIndex, isSidebarExpanded} = this.state;
         return (
             <>
-                <Header isSidebarExpanded={isSidebarExpanded} onClick={() => this.handleBurgerClick()}/>
+                <Header isSidebarExpanded={isSidebarExpanded} onClick={this.handleBurgerClick}/>
                 <div className="container-fluid">
                     <Row>
                         <Sidebar
                             isSidebarExpanded={isSidebarExpanded}
                             trades={trades}
-                            onClick={i => this.handleTradeClick(i)}
+                            onClick={this.handleTradeClick}
                         />
                         {(trades.length && trades[selectedTradeIndex])
                             ? <Main trade={trades[selectedTradeIndex]}/>

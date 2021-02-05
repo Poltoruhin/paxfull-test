@@ -1,8 +1,7 @@
 import React from "react";
 
-function TradeInfo(props) {
-    const {trade} = props;
-    return <>
+const TradeInfo = ({ trade }) => (
+     <>
         <h2>Trade info</h2>
         <div className="trade-info">
             <ul className="list-group list-group-flush">
@@ -13,6 +12,6 @@ function TradeInfo(props) {
             </ul>
         </div>
     </>
-}
+)
 
 export default TradeInfo;

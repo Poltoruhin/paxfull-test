@@ -1,12 +1,12 @@
 import React from 'react';
 
-class Sidebar extends React.Component {
-    render() {
-        const {isSidebarExpanded, trades, onClick} = this.props;
-        return <div
-            id = 'sidebarMenu'
-            className={'col-md-3 col-lg-2 d-md-block bg-pinky sidebar collapse' + (isSidebarExpanded ? ' show' : "")}
-        >
+function Sidebar(props) {
+    const {isSidebarExpanded, trades, onClick} = props;
+
+    return (<div
+                id = 'sidebarMenu'
+                className={'col-md-3 col-lg-2 d-md-block bg-pinky sidebar collapse' + (isSidebarExpanded ? ' show' : "")}
+         >
             <div className="position-sticky">
                 <h4 className="sidebar-heading d-flex justify-content-between align-items-center px-3">
                     <span>Trades</span>
@@ -30,7 +30,7 @@ class Sidebar extends React.Component {
                 </ul>
             </div>
         </div>
-    }
+    )
 }
 
 export default Sidebar;

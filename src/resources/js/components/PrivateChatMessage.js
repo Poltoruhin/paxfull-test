@@ -1,9 +1,9 @@
 import React from 'react';
 
-function PrivateChatMessage(props) {
+const PrivateChatMessage = ({ text }) => {
     return (<li className="left clearfix">
         <div className="chat-body1 clearfix">
-            <p>{props.text}</p>
+            <p>{text}</p>
             <div className="chat_time pull-right">09:40PM</div>
         </div>
     </li>);

@@ -50,6 +50,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -94,22 +100,28 @@ var App = /*#__PURE__*/function (_React$Component) {
       error: null,
       isLoaded: false
     };
+    _this.handleBurgerClick = _this.handleBurgerClick.bind(_assertThisInitialized(_this));
+    _this.handleTradeClick = _this.handleTradeClick.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(App, [{
     key: "handleTradeClick",
     value: function handleTradeClick(selectedTradeIndex) {
-      this.setState({
-        selectedTradeIndex: selectedTradeIndex,
-        isSidebarExpanded: false
+      this.setState(function (prevState) {
+        return _objectSpread(_objectSpread({}, prevState), {}, {
+          selectedTradeIndex: selectedTradeIndex,
+          isSidebarExpanded: false
+        });
       });
     }
   }, {
     key: "handleBurgerClick",
     value: function handleBurgerClick() {
-      this.setState({
-        isSidebarExpanded: !this.state.isSidebarExpanded
+      this.setState(function (prevState) {
+        return _objectSpread(_objectSpread({}, prevState), {}, {
+          isSidebarExpanded: !prevState.isSidebarExpanded
+        });
       });
     }
   }, {
@@ -117,26 +129,28 @@ var App = /*#__PURE__*/function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      fetch("http://localhost:80/api/trades").then(function (res) {
+      fetch("http://localhost:8000/api/trades").then(function (res) {
         return res.json();
       }).then(function (result) {
-        _this2.setState({
-          isLoaded: true,
-          trades: result.data,
-          selectedTradeIndex: result.data.length ? 0 : null
+        _this2.setState(function (prevState) {
+          return _objectSpread(_objectSpread({}, prevState), {}, {
+            isLoaded: true,
+            trades: result.data,
+            selectedTradeIndex: result.data.length ? 0 : null
+          });
         });
       }, function (error) {
-        _this2.setState({
-          isLoaded: true,
-          error: error
+        _this2.setState(function (prevState) {
+          return _objectSpread(_objectSpread({}, prevState), {}, {
+            isLoaded: true,
+            error: error
+          });
         });
       });
     }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
-
       var _this$state = this.state,
           trades = _this$state.trades,
           selectedTradeIndex = _this$state.selectedTradeIndex,
@@ -144,18 +158,14 @@ var App = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_Header__WEBPACK_IMPORTED_MODULE_3__.default, {
           isSidebarExpanded: isSidebarExpanded,
-          onClick: function onClick() {
-            return _this3.handleBurgerClick();
-          }
+          onClick: this.handleBurgerClick
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
           className: "container-fluid",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_Row__WEBPACK_IMPORTED_MODULE_2__.default, {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_4__.default, {
               isSidebarExpanded: isSidebarExpanded,
               trades: trades,
-              onClick: function onClick(i) {
-                return _this3.handleTradeClick(i);
-              }
+              onClick: this.handleTradeClick
             }), trades.length && trades[selectedTradeIndex] ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_Main__WEBPACK_IMPORTED_MODULE_5__.default, {
               trade: trades[selectedTradeIndex]
             }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
@@ -187,6 +197,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _Logo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Logo */ "./resources/js/components/Logo.js");
+
 
 
 
@@ -198,18 +210,7 @@ function Header(props) {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
       className: "navbar-brand header-brand col-md-3 col-lg-2 me-0 px-3 p-3",
       href: "https://paxful.com",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("svg", {
-        viewBox: "0 0 123.7 23.3",
-        xmlns: "http://www.w3.org/2000/svg",
-        className: "header-logo",
-        fill: "currentColor",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "m91.3 1.7v10.3c0 3.6 1.5 5 4.1 5s4.1-1.5 4.1-5v-10.3h4.3v10.4c0 5.5-3.1 8.5-8.4 8.5-5.2 0-8.4-3-8.4-8.5v-10.4zm-59.8 0 8.3 18.6h-4.5l-1.7-4h-8.6l-1.7 4h-4.4l8.3-18.6zm49.7 0v3.5h-9.7v4.9h8.5v3.5h-8.5v6.8h-4.3v-18.7zm32.8 0v15.1h9.7v3.5h-14v-18.6zm-105.9 0c4.9 0 8.1 2.5 8.1 6.8 0 4.1-3.1 6.7-8.1 6.7h-3.8v5.2h-4.3v-18.7zm47 9.9 6.3 8.7h-4.1c-.6 0-1.2-.2-1.6-.7l-.1-.1-2.3-3.2c-.5-.8-.5-1.8 0-2.6l.1-.2zm-25.8-5.6-2.9 7.1h5.9zm-21.4-.8h-3.6v6.5h3.5c2.7 0 4-1.2 4-3.2s-1.3-3.3-3.9-3.3zm39-3.5c.7 0 1.2.2 1.6.7l.1.1 1.2 1.7c.5.7.5 1.7.1 2.4l-.1.1-1.7 2.4-5.4-7.5z"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
-          d: "m63.1 0-21.6 23.2c-.2.3-.7-.1-.4-.4l15.6-22c.4-.5 1-.8 1.7-.8z",
-          fill: "#00a5ef"
-        })]
-      })
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_Logo__WEBPACK_IMPORTED_MODULE_2__.default, {})
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
       className: "navbar-toggler position-absolute d-md-none" + (isSidebarExpanded ? '' : ' collapsed'),
       type: "button",
@@ -227,6 +228,42 @@ function Header(props) {
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Header);
+
+/***/ }),
+
+/***/ "./resources/js/components/Logo.js":
+/*!*****************************************!*\
+  !*** ./resources/js/components/Logo.js ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+
+
+
+var Logo = function Logo() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("svg", {
+    viewBox: "0 0 123.7 23.3",
+    xmlns: "http://www.w3.org/2000/svg",
+    className: "header-logo",
+    fill: "currentColor",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
+      d: "m91.3 1.7v10.3c0 3.6 1.5 5 4.1 5s4.1-1.5 4.1-5v-10.3h4.3v10.4c0 5.5-3.1 8.5-8.4 8.5-5.2 0-8.4-3-8.4-8.5v-10.4zm-59.8 0 8.3 18.6h-4.5l-1.7-4h-8.6l-1.7 4h-4.4l8.3-18.6zm49.7 0v3.5h-9.7v4.9h8.5v3.5h-8.5v6.8h-4.3v-18.7zm32.8 0v15.1h9.7v3.5h-14v-18.6zm-105.9 0c4.9 0 8.1 2.5 8.1 6.8 0 4.1-3.1 6.7-8.1 6.7h-3.8v5.2h-4.3v-18.7zm47 9.9 6.3 8.7h-4.1c-.6 0-1.2-.2-1.6-.7l-.1-.1-2.3-3.2c-.5-.8-.5-1.8 0-2.6l.1-.2zm-25.8-5.6-2.9 7.1h5.9zm-21.4-.8h-3.6v6.5h3.5c2.7 0 4-1.2 4-3.2s-1.3-3.3-3.9-3.3zm39-3.5c.7 0 1.2.2 1.6.7l.1.1 1.2 1.7c.5.7.5 1.7.1 2.4l-.1.1-1.7 2.4-5.4-7.5z"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
+      d: "m63.1 0-21.6 23.2c-.2.3-.7-.1-.4-.4l15.6-22c.4-.5 1-.8 1.7-.8z",
+      fill: "#00a5ef"
+    })]
+  });
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Logo);
 
 /***/ }),
 
@@ -293,12 +330,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function MainColumn(props) {
+var MainColumn = function MainColumn(_ref) {
+  var children = _ref.children;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
     className: "col-lg-6 mb-5",
-    children: props.children
+    children: children
   });
-}
+};
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (MainColumn);
 
@@ -325,11 +363,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function PrivateChat(props) {
+  var interlocutor = props.interlocutor;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
       className: "chat_container",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("h2", {
-        children: ["Chat with ", props.interlocutor.name + ' (Reputation: ' + props.interlocutor.reputation + ')']
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h2", {
+        children: "Chat with ".concat(interlocutor.name, " Reputation: ").concat(interlocutor.reputation)
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
         className: "col-sm-9 message_section",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
@@ -398,20 +437,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function PrivateChatMessage(props) {
+var PrivateChatMessage = function PrivateChatMessage(_ref) {
+  var text = _ref.text;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("li", {
     className: "left clearfix",
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
       className: "chat-body1 clearfix",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", {
-        children: props.text
+        children: text
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
         className: "chat_time pull-right",
         children: "09:40PM"
       })]
     })
   });
-}
+};
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PrivateChatMessage);
 
@@ -433,12 +473,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function Row(props) {
+var Row = function Row(_ref) {
+  var children = _ref.children;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
     className: "row",
-    children: props.children
+    children: children
   });
-}
+};
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Row);
 
@@ -457,86 +498,45 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 
 
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-
-
-var Sidebar = /*#__PURE__*/function (_React$Component) {
-  _inherits(Sidebar, _React$Component);
-
-  var _super = _createSuper(Sidebar);
-
-  function Sidebar() {
-    _classCallCheck(this, Sidebar);
-
-    return _super.apply(this, arguments);
-  }
-
-  _createClass(Sidebar, [{
-    key: "render",
-    value: function render() {
-      var _this$props = this.props,
-          isSidebarExpanded = _this$props.isSidebarExpanded,
-          trades = _this$props.trades,
-          _onClick = _this$props.onClick;
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-        id: "sidebarMenu",
-        className: 'col-md-3 col-lg-2 d-md-block bg-pinky sidebar collapse' + (isSidebarExpanded ? ' show' : ""),
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-          className: "position-sticky",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h4", {
-            className: "sidebar-heading d-flex justify-content-between align-items-center px-3",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-              children: "Trades"
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("ul", {
-            className: "nav flex-column mb-2 mt-3 sticky-top",
-            children: trades.map(function (trade, i) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("li", {
-                className: "nav-item",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("a", {
-                  className: "nav-link",
-                  href: "#",
-                  onClick: function onClick(e) {
-                    e.preventDefault();
-
-                    _onClick(i);
-                  },
-                  children: [trade.buyer.name, " - ", trade.amount, "$ (", trade.status, ")"]
-                })
-              }, trade.id);
-            })
-          })]
+function Sidebar(props) {
+  var isSidebarExpanded = props.isSidebarExpanded,
+      trades = props.trades,
+      _onClick = props.onClick;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+    id: "sidebarMenu",
+    className: 'col-md-3 col-lg-2 d-md-block bg-pinky sidebar collapse' + (isSidebarExpanded ? ' show' : ""),
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+      className: "position-sticky",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h4", {
+        className: "sidebar-heading d-flex justify-content-between align-items-center px-3",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+          children: "Trades"
         })
-      });
-    }
-  }]);
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("ul", {
+        className: "nav flex-column mb-2 mt-3 sticky-top",
+        children: trades.map(function (trade, i) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("li", {
+            className: "nav-item",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("a", {
+              className: "nav-link",
+              href: "#",
+              onClick: function onClick(e) {
+                e.preventDefault();
 
-  return Sidebar;
-}(react__WEBPACK_IMPORTED_MODULE_1__.Component);
+                _onClick(i);
+              },
+              children: [trade.buyer.name, " - ", trade.amount, "$ (", trade.status, ")"]
+            })
+          }, trade.id);
+        })
+      })]
+    })
+  });
+}
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Sidebar);
 
@@ -560,8 +560,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function TradeInfo(props) {
-  var trade = props.trade;
+var TradeInfo = function TradeInfo(_ref) {
+  var trade = _ref.trade;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h2", {
       children: "Trade info"
@@ -585,7 +585,7 @@ function TradeInfo(props) {
       })
     })]
   });
-}
+};
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TradeInfo);
 

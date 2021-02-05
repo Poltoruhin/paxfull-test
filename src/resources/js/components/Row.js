@@ -1,7 +1,5 @@
 import React from "react";
 
-function Row(props) {
-    return <div className="row">{props.children}</div>
-}
+const Row = ({ children }) => <div className="row">{children}</div>
 
 export default Row;
