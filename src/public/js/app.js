@@ -212,12 +212,12 @@ function Header(props) {
       href: "https://paxful.com",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_Logo__WEBPACK_IMPORTED_MODULE_2__.default, {})
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", {
-      className: "navbar-toggler position-absolute d-md-none" + (isSidebarExpanded ? '' : ' collapsed'),
+      className: "navbar-toggler position-absolute d-md-none" + (isSidebarExpanded ? "" : " collapsed"),
       type: "button",
       "data-bs-toggle": "collapse",
       "data-bs-target": "#sidebarMenu",
       "aria-controls": "sidebarMenu",
-      "aria-expanded": isSidebarExpanded ? 'true' : 'false',
+      "aria-expanded": isSidebarExpanded ? "true" : "false",
       "aria-label": "Toggle navigation",
       onClick: props.onClick,
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
@@ -508,7 +508,7 @@ function Sidebar(props) {
       _onClick = props.onClick;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
     id: "sidebarMenu",
-    className: 'col-md-3 col-lg-2 d-md-block bg-pinky sidebar collapse' + (isSidebarExpanded ? ' show' : ""),
+    className: "col-md-3 col-lg-2 d-md-block bg-pinky sidebar collapse" + (isSidebarExpanded ? " show" : ""),
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
       className: "position-sticky",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h4", {
