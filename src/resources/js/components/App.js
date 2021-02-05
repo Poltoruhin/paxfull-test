@@ -34,7 +34,7 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:8000/api/trades")
+        fetch("http://localhost:80/api/trades")
             .then((res) => res.json())
             .then(
                 (result) => {
