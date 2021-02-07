@@ -1,14 +1,18 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\PaymentMethodEnum;
 use App\Enums\TradeStatusEnum;
+use App\Http\Requests\StoreTradeRequest;
 use App\Http\Resources\TradeResource;
 use App\Models\Trade;
 use App\Models\User;
 use App\Services\BtcPriceProvider;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Services\CurrencyExchangeHelper;
+use App\Services\MoneyTransferManager;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class TradeController extends Controller
 {
@@ -17,43 +21,41 @@ class TradeController extends Controller
         return TradeResource::collection(Trade::all());
     }
 
-    public function show(Trade $trade)
+    public function show(Trade $trade): TradeResource
     {
         return TradeResource::make($trade);
     }
 
-    public function store(Request $request, BtcPriceProvider $btcPriceProvider)
-    {
-        return DB::transaction(function () use ($request, $btcPriceProvider) {
-            $validated = $request->validate([
-                'amount' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+    public function store(
+        StoreTradeRequest $request,
+        BtcPriceProvider $btcPriceProvider,
+        CurrencyExchangeHelper $currencyExchangeHelper,
+        MoneyTransferManager $moneyTransferManager
+    ): TradeResource {
+        $buyer = User::firstOrFail();
+        $seller = User::latest('id')->firstOrFail();
+
+        try {
+            $rate = $btcPriceProvider->getPriceInUsd();
+            $usdAmount = (float) $request->amount;
+            $satoshiAmount = $currencyExchangeHelper->usdToSatoshi($usdAmount, $rate);
+            $moneyTransferManager->transferSatoshi($seller, $buyer, $satoshiAmount);
+        } catch (\Throwable $exception) {
+            response()->json([
+                'status' => 'failed',
+                'error' => $exception->getMessage(),
             ]);
-            $buyer = User::firstOrFail();
-            $seller = User::latest('id')->firstOrFail();
-            $buyerWallet = $buyer->wallet()->lockForUpdate()->first();
-            $sellerWallet = $seller->wallet()->lockForUpdate()->first();
-            $usdAmount = (float) $validated['amount'];
-            $rate = (float) $btcPriceProvider->getPriceInUsd();
-            $satoshiAmount = (int) ($usdAmount / $rate * (10 ** 8));
+        }
 
-            if ($buyerWallet->balance < $satoshiAmount) {
-                throw new \Exception('Not enough satoshi in seller`s wallet.');
-            }
+        $trade = new Trade();
+        $trade->amount = $satoshiAmount;
+        $trade->rate = $rate;
+        $trade->status = TradeStatusEnum::PAID();
+        $trade->payment_method_name = PaymentMethodEnum::WEBMONEY();
+        $trade->buyer_id = $buyer->id;
+        $trade->seller_id = $seller->id;
+        $trade->save();
 
-            $sellerWallet->balance -= $satoshiAmount;
-            $sellerWallet->save();
-            $buyerWallet->balance += $satoshiAmount;
-            $buyerWallet->save();
-
-            $trade = new Trade();
-            $trade->amount = $satoshiAmount;
-            $trade->rate = $rate;
-            $trade->status = TradeStatusEnum::PAID();
-            $trade->payment_method_name = 'PayPal';
-            $trade->buyer_id = $buyer->id;
-            $trade->save();
-
-            return TradeResource::make($trade);
-        });
+        return TradeResource::make($trade);
     }
 }

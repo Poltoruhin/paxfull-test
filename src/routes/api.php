@@ -14,11 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
 Route::prefix('trades')->group(function () {
     Route::get('', [TradeController::class, 'index']);
     Route::post('', [TradeController::class, 'store']);
-    Route::get('{trade}', [TradeController::class, 'show']);
+    Route::get('{trade}', [TradeController::class, 'show'])->whereNumber('trade');
 });
