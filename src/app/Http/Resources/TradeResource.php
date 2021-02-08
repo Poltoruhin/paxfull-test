@@ -8,6 +8,9 @@ use App\Services\CurrencyExchangeHelper;
 use App\Services\MoneyFormatter;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Trade
+ */
 class TradeResource extends JsonResource
 {
     public function __construct(Trade $trade)

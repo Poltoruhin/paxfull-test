@@ -13,25 +13,86 @@ use App\Services\BtcPriceProvider;
 use App\Services\CurrencyExchangeHelper;
 use App\Services\MoneyTransferManager;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class TradeController extends Controller
 {
-    public function index()
+    /**
+     * @OA\Get(
+     *      path="/api/trades",
+     *      operationId="getTradesList",
+     *      tags={"Trades"},
+     *      summary="Get list of trades",
+     *      description="Returns list of trades",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/TradeCollection")
+     *       )
+     *     )
+     */
+    public function index(): AnonymousResourceCollection
     {
         return TradeResource::collection(Trade::all());
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/trades/{id}",
+     *      operationId="getTradeById",
+     *      tags={"Trades"},
+     *      summary="Get trade information",
+     *      description="Returns trade data",
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="Trade id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/Trade")
+     *       ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Not Found"
+     *      )
+     * )
+     */
     public function show(Trade $trade): TradeResource
     {
         return TradeResource::make($trade);
     }
 
+    /**
+     * @OA\Post(
+     *      path="/api/trades",
+     *      operationId="storeTrade",
+     *      tags={"Trades"},
+     *      summary="Store new trade",
+     *      description="Store new trade",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/StoreTradeRequest")
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/Trade")
+     *       )
+     * )
+     */
     public function store(
         StoreTradeRequest $request,
         BtcPriceProvider $btcPriceProvider,
         CurrencyExchangeHelper $currencyExchangeHelper,
         MoneyTransferManager $moneyTransferManager
-    ): TradeResource {
+    ): JsonResponse {
         $buyer = User::firstOrFail();
         $seller = User::latest('id')->firstOrFail();
 
@@ -56,6 +117,6 @@ class TradeController extends Controller
         $trade->seller_id = $seller->id;
         $trade->save();
 
-        return TradeResource::make($trade);
+        return TradeResource::make($trade)->response()->setStatusCode(Response::HTTP_CREATED);
     }
 }
