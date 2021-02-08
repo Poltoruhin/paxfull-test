@@ -7,13 +7,21 @@ class CurrencyExchangeHelper
 {
     public function satoshiToUsd(int $satoshiAmount, float $btcPriceInUsd): float
     {
-        $result = (float) ($satoshiAmount / 10 ** 8) * $btcPriceInUsd;
-
+        $result = (float) (bcmul(
+            (string) ($satoshiAmount / 10 ** 8),
+            (string) $btcPriceInUsd,
+            4)
+        );
+        
         return round($result, 2);
     }
 
     public function usdToSatoshi(float $usdAmount, float $btcPriceInUsd): int
     {
-        return (int) ($usdAmount / $btcPriceInUsd * (10 ** 8));
+        return (int) (bcdiv(
+            (string) $usdAmount,
+            (string) $btcPriceInUsd,
+            8
+        ) * (10 ** 8));
     }
 }

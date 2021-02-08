@@ -13,11 +13,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class TradeResource extends JsonResource
 {
-    public function __construct(Trade $trade)
-    {
-        parent::__construct($trade);
-    }
-
     public function toArray($request): array
     {
         /** @var CurrencyExchangeHelper $currencyExchangeHelper */

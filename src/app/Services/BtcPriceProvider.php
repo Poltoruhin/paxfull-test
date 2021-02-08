@@ -5,7 +5,6 @@ namespace App\Services;
 
 use App\Exceptions\BtcUsdRateRequestException;
 use Illuminate\Http\Client\Factory;
-use Illuminate\Support\Facades\Http;
 
 class BtcPriceProvider
 {
