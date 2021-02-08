@@ -1,0 +1,245 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Laravel OpenApi PaxFullTestApp Documentation",
+        "description": "PaxFullTestApp OpenApi description",
+        "contact": {
+            "email": "admin@admin.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/trades": {
+            "get": {
+                "tags": [
+                    "Trades"
+                ],
+                "summary": "Get list of trades",
+                "description": "Returns list of trades",
+                "operationId": "getTradesList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TradeCollection"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Trades"
+                ],
+                "summary": "Store new trade",
+                "description": "Store new trade",
+                "operationId": "storeTrade",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreTradeRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Trade"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/trades/{id}": {
+            "get": {
+                "tags": [
+                    "Trades"
+                ],
+                "summary": "Get trade information",
+                "description": "Returns trade data",
+                "operationId": "getTradeById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Trade id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Trade"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "TradeCollection": {
+                "title": "TradeCollection",
+                "description": "Collection of trades",
+                "properties": {
+                    "data": {
+                        "title": "Data",
+                        "description": "Data wrapper",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Trade"
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "TradeCollection"
+                }
+            },
+            "Trade": {
+                "title": "Trade",
+                "description": "Trade model",
+                "properties": {
+                    "id": {
+                        "title": "ID",
+                        "description": "ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "amount": {
+                        "title": "Amount",
+                        "description": "Trade amount in USD",
+                        "type": "string",
+                        "example": "332589.97"
+                    },
+                    "rate": {
+                        "title": "Rate",
+                        "description": "BTC price in USD",
+                        "type": "string",
+                        "example": "382589.97"
+                    },
+                    "payment_method": {
+                        "title": "Payment method",
+                        "description": "Payment method name",
+                        "type": "string",
+                        "example": "PayPal"
+                    },
+                    "status": {
+                        "title": "Status",
+                        "description": "Trade status",
+                        "type": "string",
+                        "enum": [
+                            "Paid",
+                            "Not Paid"
+                        ]
+                    },
+                    "created_at": {
+                        "title": "Created at",
+                        "description": "Created at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2021-02-08T13:52:56.000000Z"
+                    },
+                    "updated_id": {
+                        "title": "Updated at",
+                        "description": "Updated at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2021-02-08T13:52:56.000000Z"
+                    },
+                    "buyer": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "seller": {
+                        "$ref": "#/components/schemas/User"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Trade"
+                }
+            },
+            "User": {
+                "title": "User",
+                "description": "User model",
+                "properties": {
+                    "id": {
+                        "title": "ID",
+                        "description": "ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "title": "Name",
+                        "description": "Name of the user",
+                        "type": "string",
+                        "example": "Mr. John Doe"
+                    },
+                    "reputation": {
+                        "title": "Reputation",
+                        "description": "User`s reputation",
+                        "type": "integer",
+                        "example": -1
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "USer"
+                }
+            },
+            "StoreTradeRequest": {
+                "title": "Store Trade request",
+                "description": "Store Trade request body data",
+                "required": [
+                    "amount"
+                ],
+                "properties": {
+                    "amount": {
+                        "title": "Amount",
+                        "description": "Trade amount in USD",
+                        "type": "string",
+                        "example": "332589.97"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Projects",
+            "description": "API Endpoints of Projects"
+        }
+    ],
+    "security": [
+        []
+    ]
+}

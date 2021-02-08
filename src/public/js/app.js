@@ -129,7 +129,7 @@ var App = /*#__PURE__*/function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      fetch("http://localhost:8000/api/trades").then(function (res) {
+      fetch("http://localhost:80/api/trades").then(function (res) {
         return res.json();
       }).then(function (result) {
         _this2.setState(function (prevState) {
