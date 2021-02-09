@@ -14,6 +14,7 @@ class WalletFactory extends Factory
     {
         return [
             'balance' => $this->faker->numberBetween(10**9, 10**10),
+            'address' => $this->faker->uuid
         ];
     }
 }
