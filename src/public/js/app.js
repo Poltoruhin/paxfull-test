@@ -203,8 +203,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function Header(props) {
-  var isSidebarExpanded = props.isSidebarExpanded;
+var Header = function Header(_ref) {
+  var isSidebarExpanded = _ref.isSidebarExpanded,
+      onClick = _ref.onClick;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("header", {
     className: "navbar navbar-light sticky-top bg-white flex-md-nowrap p-0 shadow-sm",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
@@ -219,13 +220,13 @@ function Header(props) {
       "aria-controls": "sidebarMenu",
       "aria-expanded": isSidebarExpanded ? "true" : "false",
       "aria-label": "Toggle navigation",
-      onClick: props.onClick,
+      onClick: onClick,
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
         className: "navbar-toggler-icon"
       })
     })]
   });
-}
+};
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Header);
 
@@ -292,8 +293,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function Main(props) {
-  var trade = props.trade;
+var Main = function Main(_ref) {
+  var trade = _ref.trade;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("main", {
     className: "col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-4",
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_Row__WEBPACK_IMPORTED_MODULE_3__.default, {
@@ -308,7 +309,7 @@ function Main(props) {
       })]
     })
   });
-}
+};
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Main);
 
@@ -362,8 +363,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function PrivateChat(props) {
-  var interlocutor = props.interlocutor;
+var PrivateChat = function PrivateChat(_ref) {
+  var interlocutor = _ref.interlocutor;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
       className: "chat_container",
@@ -414,7 +415,7 @@ function PrivateChat(props) {
       })]
     })
   });
-}
+};
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PrivateChat);
 
@@ -502,10 +503,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function Sidebar(props) {
-  var isSidebarExpanded = props.isSidebarExpanded,
-      trades = props.trades,
-      _onClick = props.onClick;
+var Sidebar = function Sidebar(_ref) {
+  var isSidebarExpanded = _ref.isSidebarExpanded,
+      trades = _ref.trades,
+      _onClick = _ref.onClick;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
     id: "sidebarMenu",
     className: "col-md-3 col-lg-2 d-md-block bg-pinky sidebar collapse" + (isSidebarExpanded ? " show" : ""),
@@ -536,7 +537,7 @@ function Sidebar(props) {
       })]
     })
   });
-}
+};
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Sidebar);
 
