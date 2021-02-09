@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property User user
  * @property int balance
+ * @property string address
  */
 class Wallet extends Model
 {
