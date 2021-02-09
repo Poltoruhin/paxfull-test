@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property PaymentMethodEnum payment_method_name
  * @property User buyer
  * @property User seller
+ * @property int buyer_id
+ * @property int seller_id
  * @property \DateTime created_at
  * @property \DateTime updated_at
  */

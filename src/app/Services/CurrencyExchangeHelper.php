@@ -12,7 +12,7 @@ class CurrencyExchangeHelper
             (string) $btcPriceInUsd,
             4)
         );
-        
+
         return round($result, 2);
     }
 

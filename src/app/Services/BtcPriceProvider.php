@@ -20,7 +20,7 @@ class BtcPriceProvider
      */
     public function getPriceInUsd(): float
     {
-        $response = $this->httpClient->get('https://api.pro.coinbase.com/products/BTC-USD/ticker');
+        $response = $this->httpClient->get(config('app.btc_price_provider_url'));
 
         if (!$response->successful()) {
             throw new BtcUsdRateRequestException();

@@ -162,14 +162,14 @@
                     },
                     "created_at": {
                         "title": "Created at",
-                        "description": "Created at",
+                        "description": "Created at datetime",
                         "type": "string",
                         "format": "datetime",
                         "example": "2021-02-08T13:52:56.000000Z"
                     },
                     "updated_id": {
                         "title": "Updated at",
-                        "description": "Updated at",
+                        "description": "Updated at datetime",
                         "type": "string",
                         "format": "datetime",
                         "example": "2021-02-08T13:52:56.000000Z"
@@ -193,26 +193,23 @@
                     "id": {
                         "title": "ID",
                         "description": "ID",
-                        "type": "integer",
                         "format": "int64",
                         "example": 1
                     },
                     "name": {
                         "title": "Name",
                         "description": "Name of the user",
-                        "type": "string",
                         "example": "Mr. John Doe"
                     },
                     "reputation": {
                         "title": "Reputation",
                         "description": "User`s reputation",
-                        "type": "integer",
                         "example": -1
                     }
                 },
                 "type": "object",
                 "xml": {
-                    "name": "USer"
+                    "name": "User"
                 }
             },
             "StoreTradeRequest": {
@@ -224,7 +221,7 @@
                 "properties": {
                     "amount": {
                         "title": "Amount",
-                        "description": "Trade amount in USD",
+                        "description": "rade amount in USD",
                         "type": "string",
                         "example": "332589.97"
                     }

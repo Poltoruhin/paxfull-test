@@ -1,17 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Enums\PaymentMethodEnum;
-use App\Enums\TradeStatusEnum;
 use App\Http\Requests\StoreTradeRequest;
 use App\Http\Resources\TradeResource;
 use App\Models\Trade;
 use App\Models\User;
 use App\Services\BtcPriceProvider;
 use App\Services\CurrencyExchangeHelper;
-use App\Services\MoneyTransferManager;
+use App\Services\TradeManager;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +28,9 @@ class TradeController extends Controller
      *          description="Successful operation",
      *          @OA\JsonContent(ref="#/components/schemas/TradeCollection")
      *       )
-     *     )
+     * )
+     *
+     * @return AnonymousResourceCollection
      */
     public function index(): AnonymousResourceCollection
     {
@@ -63,6 +63,9 @@ class TradeController extends Controller
      *          description="Not Found"
      *      )
      * )
+     *
+     * @param Trade $trade
+     * @return TradeResource
      */
     public function show(Trade $trade): TradeResource
     {
@@ -86,12 +89,18 @@ class TradeController extends Controller
      *          @OA\JsonContent(ref="#/components/schemas/Trade")
      *       )
      * )
+     *
+     * @param StoreTradeRequest $request
+     * @param BtcPriceProvider $btcPriceProvider
+     * @param CurrencyExchangeHelper $currencyExchangeHelper
+     * @param TradeManager $tradeManager
+     * @return JsonResponse
      */
     public function store(
         StoreTradeRequest $request,
         BtcPriceProvider $btcPriceProvider,
         CurrencyExchangeHelper $currencyExchangeHelper,
-        MoneyTransferManager $moneyTransferManager
+        TradeManager $tradeManager
     ): JsonResponse {
         $buyer = User::firstOrFail();
         $seller = User::latest('id')->firstOrFail();
@@ -100,22 +109,13 @@ class TradeController extends Controller
             $rate = $btcPriceProvider->getPriceInUsd();
             $usdAmount = (float) $request->amount;
             $satoshiAmount = $currencyExchangeHelper->usdToSatoshi($usdAmount, $rate);
-            $moneyTransferManager->transferSatoshi($seller, $buyer, $satoshiAmount);
+            $trade = $tradeManager->trade($seller, $buyer, $satoshiAmount, $rate);
         } catch (\Throwable $exception) {
-            response()->json([
+            return response()->json([
                 'status' => 'failed',
                 'error' => $exception->getMessage(),
             ]);
         }
-
-        $trade = new Trade();
-        $trade->amount = $satoshiAmount;
-        $trade->rate = $rate;
-        $trade->status = TradeStatusEnum::PAID();
-        $trade->payment_method_name = PaymentMethodEnum::WEBMONEY();
-        $trade->buyer_id = $buyer->id;
-        $trade->seller_id = $seller->id;
-        $trade->save();
 
         return TradeResource::make($trade)->response()->setStatusCode(Response::HTTP_CREATED);
     }

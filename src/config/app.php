@@ -229,4 +229,14 @@ return [
 
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Custom params
+    |--------------------------------------------------------------------------
+    |
+    */
+    'btc_price_provider_url' => env(
+        'BTC_PRICE_PROVIDER_URL',
+        'https://api.pro.coinbase.com/products/BTC-USD/ticker'
+    ),
 ];

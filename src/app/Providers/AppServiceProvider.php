@@ -1,8 +1,8 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Http\Resources\TradeResource;
 use App\Services\BtcPriceProvider;
 use App\Services\CurrencyExchangeHelper;
 use App\Services\MoneyFormatter;
